@@ -1,12 +1,13 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useCallback} from 'react'
 
 const resource = 'activities'
 
-export default function Activities(){
+export default function Activities({onShowDetail}){
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
 
-  useEffect(()=>{
+  const fetchData = useCallback(()=>{
+    setLoading(true)
     const codespace = process.env.REACT_APP_CODESPACE_NAME
     const endpoint = `https://${codespace}-8000.app.github.dev/api/${resource}/`
     console.log('Fetching endpoint:', endpoint)
@@ -25,6 +26,8 @@ export default function Activities(){
       })
       .finally(()=> setLoading(false))
   },[])
+
+  useEffect(()=>{ fetchData() },[fetchData])
 
   return (
     <div className="card p-3">
