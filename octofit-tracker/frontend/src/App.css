@@ -1,0 +1,30 @@
+:root{
+  --brand: #095fa3;
+}
+body{
+  background: #f6f8fb;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+.navbar-brand{
+  color: var(--brand) !important;
+  font-weight:700;
+}
+.container .card{
+  box-shadow: 0 2px 8px rgba(9,95,163,0.08);
+}
+.table thead th{
+  background: #eef6ff;
+  color: #08304a;
+}
+.table td, .table th{
+  vertical-align: middle;
+}
+.card-title{
+  color: var(--brand);
+}
+.small-muted{
+  color: #6c757d;
+}
+.refresh-btn{
+  margin-left: 8px;
+}
