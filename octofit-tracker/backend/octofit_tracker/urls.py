@@ -1,14 +1,33 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+import os
+
+
 @api_view(['GET'])
 def api_root(request, format=None):
+    """Return API root with URLs adjusted for Codespaces when available.
+
+    If the CODESPACE_NAME env var is set, build absolute URLs using the
+    Codespace domain https://$CODESPACE_NAME-8000.app.github.dev to avoid
+    certificate issues. Otherwise fall back to DRF's reverse which uses the
+    current request host.
+    """
+    codespace = os.environ.get('CODESPACE_NAME')
+    def build(name):
+        if codespace:
+            base = f'https://{codespace}-8000.app.github.dev'
+            # reverse without request to get the path only
+            path = reverse(name, request=None, format=format)
+            return f'{base}{path}'
+        return reverse(name, request=request, format=format)
+
     return Response({
-        'users': reverse('user-list', request=request, format=format),
-        'teams': reverse('team-list', request=request, format=format),
-        'activities': reverse('activity-list', request=request, format=format),
-        'leaderboard': reverse('leaderboard-list', request=request, format=format),
-        'workouts': reverse('workout-list', request=request, format=format),
+        'users': build('user-list'),
+        'teams': build('team-list'),
+        'activities': build('activity-list'),
+        'leaderboard': build('leaderboard-list'),
+        'workouts': build('workout-list'),
     })
 """octofit_tracker URL Configuration
 
